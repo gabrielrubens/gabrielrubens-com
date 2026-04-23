@@ -11,6 +11,8 @@ category: job search
 featured: true
 order: 4
 icon: /assets/gothired.png
+screenshot: /assets/screenshots/gothired.png
+screenshotOrientation: landscape
 palette:
   bg:     "#0f1d2d"
   ink:    "#e6eef5"

@@ -11,6 +11,8 @@ category: journaling
 featured: true
 order: 1
 icon: /assets/pensio.png
+screenshot: /assets/screenshots/pensio.png
+screenshotOrientation: portrait
 palette:
   bg:     "#f5ece2"
   ink:    "#2a1a0e"

@@ -11,6 +11,8 @@ category: relationships
 featured: true
 order: 3
 icon: /assets/gravity.png
+screenshot: /assets/screenshots/gravity.png
+screenshotOrientation: portrait
 palette:
   bg:     "#1b1f3a"
   ink:    "#e8e9f4"

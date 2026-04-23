@@ -11,6 +11,8 @@ category: hobbies
 featured: true
 order: 2
 icon: /assets/hobbycat.png
+screenshot: /assets/screenshots/hobbycat.png
+screenshotOrientation: portrait
 palette:
   bg:     "#fbe3e8"
   ink:    "#3a0e1c"
