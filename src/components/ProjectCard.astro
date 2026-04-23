@@ -7,7 +7,7 @@ interface Props {
 }
 
 const { project } = Astro.props;
-const { title, tagline, status, url, palette } = project.data;
+const { title, tagline, status, url, palette, screenshot, screenshotOrientation } = project.data;
 const domain = url ? url.replace(/^https?:\/\//, '').replace(/\/$/, '') : '';
 const shotLabel = `${title.toLowerCase()}.app`;
 
@@ -21,7 +21,12 @@ const styleVars = [
 ].join(';');
 ---
 <a class="project-card" href={`/projects/${project.id}`} style={styleVars}>
-  <div class="shot" data-shot-label={shotLabel}></div>
+  <div
+    class:list={['shot', { 'has-image': !!screenshot, [`is-${screenshotOrientation}`]: !!screenshotOrientation }]}
+    data-shot-label={shotLabel}
+  >
+    {screenshot && <img class="card-shot-image" src={screenshot} alt={`${title} screenshot`} loading="lazy" />}
+  </div>
   <div class="body">
     <div class="head">
       <h3 class="title">{title}<em>.</em></h3>
