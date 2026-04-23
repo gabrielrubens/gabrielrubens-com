@@ -1,0 +1,40 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('writing', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime()
+);
+---
+<Base
+  title="Writing — Gabriel Rubens"
+  description="Notes on building small products, Rails, Hotwire Native, and indie hacking."
+>
+  <section class="hero">
+    <h1>Writing</h1>
+    <p class="lead">
+      Notes on building small products, Rails + Hotwire Native, and indie hacking
+      while holding a full-time job.
+    </p>
+  </section>
+
+  <section class="section">
+    {posts.length === 0 ? (
+      <div class="empty-state">
+        No posts yet. The first one is coming soon.
+      </div>
+    ) : (
+      <ul class="post-list">
+        {posts.map((post) => (
+          <li>
+            <a href={`/writing/${post.id}`}>{post.data.title}</a>
+            <div class="date">
+              {post.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
+            </div>
+            <p>{post.data.description}</p>
+          </li>
+        ))}
+      </ul>
+    )}
+  </section>
+</Base>

@@ -1,0 +1,33 @@
+---
+import Base from '../layouts/Base.astro';
+
+const notionUrl = 'https://gabrielrubens.com/';
+---
+<Base
+  title="Impossible List — Gabriel Rubens"
+  description="A living list of ambitious goals — the things I want to do before I can't."
+>
+  <section class="hero">
+    <h1>The Impossible List</h1>
+    <p class="lead">
+      Inspired by Joel Runyon's concept, this is a living list of goals that feel
+      impossible — until they aren't. Unlike a bucket list, every item here is
+      designed to lead to more items. Growth compounds.
+    </p>
+  </section>
+
+  <section class="section">
+    <div class="empty-state">
+      <p>
+        The full list currently lives in Notion. I'm planning to migrate it here
+        so I can track progress publicly and link items to the writing and
+        projects they spawn.
+      </p>
+      <p>
+        <a class="cta" href={notionUrl} target="_blank" rel="noopener">
+          View the current list →
+        </a>
+      </p>
+    </div>
+  </section>
+</Base>

@@ -1,0 +1,27 @@
+---
+import Base from '../../layouts/Base.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import { getCollection } from 'astro:content';
+
+const projects = (await getCollection('projects')).sort(
+  (a, b) => a.data.order - b.data.order
+);
+---
+<Base
+  title="Projects — Gabriel Rubens"
+  description="Small products I've built and shipped as a solo developer."
+>
+  <section class="hero">
+    <h1>Projects</h1>
+    <p class="lead">
+      Everything I've built, shipped, or am currently working on. Most are Rails
+      + Hotwire Native apps deployed with Kamal 2 on a single VPS.
+    </p>
+  </section>
+
+  <section class="section">
+    <div class="project-grid">
+      {projects.map((p) => <ProjectCard project={p} />)}
+    </div>
+  </section>
+</Base>

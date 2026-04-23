@@ -1,0 +1,53 @@
+---
+import Base from '../layouts/Base.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import { getCollection } from 'astro:content';
+
+const projects = (await getCollection('projects')).sort(
+  (a, b) => a.data.order - b.data.order
+);
+
+const posts = (await getCollection('writing', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())
+  .slice(0, 3);
+---
+<Base title="Gabriel Rubens">
+  <section class="hero">
+    <h1>Hi, I'm Gabriel.</h1>
+    <p class="lead">
+      I'm a software developer based in Portugal, building small, useful products
+      on the side of a full-time job. This is where I keep track of what I ship.
+    </p>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <h2>Projects</h2>
+      <a href="/projects" class="more">See all →</a>
+    </div>
+    <div class="project-grid">
+      {projects.slice(0, 4).map((p) => <ProjectCard project={p} />)}
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <h2>Writing</h2>
+      <a href="/writing" class="more">Archive →</a>
+    </div>
+    {posts.length === 0 ? (
+      <div class="empty-state">First post coming soon. Building in public starts here.</div>
+    ) : (
+      <ul class="post-list">
+        {posts.map((post) => (
+          <li>
+            <a href={`/writing/${post.id}`}>{post.data.title}</a>
+            <div class="date">
+              {post.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
+            </div>
+          </li>
+        ))}
+      </ul>
+    )}
+  </section>
+</Base>
