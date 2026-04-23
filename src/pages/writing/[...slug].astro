@@ -17,22 +17,27 @@ interface Props {
 
 const { post } = Astro.props;
 const { Content } = await render(post);
-const { title, description, pubDate, tags } = post.data;
+const { title, description, pubDate } = post.data;
+
+const formattedDate = pubDate
+  .toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })
+  .toLowerCase();
 ---
 <Base title={`${title} — Gabriel Rubens`} description={description}>
-  <article>
-    <header>
-      <a href="/writing" class="more">← All posts</a>
-      <h1>{title}</h1>
-      <div class="meta">
-        <span class="date">
-          {pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
-        </span>
-        {tags.map((t) => <span class="tag">{t}</span>)}
-      </div>
-    </header>
-    <div class="prose">
-      <Content />
-    </div>
+  <a href="/writing" class="back">← writing</a>
+
+  <header class="post-head">
+    <div class="post-date-big">{formattedDate}</div>
+    <h1>{title}<em>.</em></h1>
+    <p class="post-dek">{description}</p>
+  </header>
+
+  <article class="prose post-prose">
+    <Content />
   </article>
+
+  <div class="coda">
+    <div class="writing-latest">Thanks for reading. <a href="https://twitter.com/gabrielrubens">say hi</a>.</div>
+    <div class="links"><a href="/writing">← all writing</a></div>
+  </div>
 </Base>

@@ -4,8 +4,20 @@ tagline: AI-powered help for landing your next job.
 status: live
 url: https://gothired.ai
 stack: [Rails, Hotwire, Hotwire Native, Postgres, Kamal]
+platforms: "Web · iOS · Android"
+launched: "Oct 2024"
+now: "Live · improving interview prep"
+category: job search
 featured: true
-order: 2
+order: 4
+icon: /assets/gothired.png
+palette:
+  bg:     "#0f1d2d"
+  ink:    "#e6eef5"
+  ink2:   "#9fb3c4"
+  dot:    "#1c3048"
+  mark:   "#3dbfb6"
+  accent: "#3dbfb6"
 ---
 
 ## What it is

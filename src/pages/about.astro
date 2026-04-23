@@ -2,28 +2,53 @@
 import Base from '../layouts/Base.astro';
 ---
 <Base title="About — Gabriel Rubens">
-  <section class="hero">
-    <h1>About</h1>
-  </section>
+  <div class="page-eyebrow">// about</div>
+  <h1 class="page-title">Gabriel <em>Rubens</em>.</h1>
 
-  <section class="prose">
-    <p>
-      I'm Gabriel Rubens, a Brazilian software developer based in Portugal. By day
-      I work as an Agile Coach. By night (and weekends) I build small products —
-      mostly Rails + Hotwire Native apps — and ship them to a single VPS with
-      Kamal 2.
-    </p>
+  <div class="about-grid">
+    <div class="prose">
+      <p style="font-size:1.2rem;color:var(--ink)">
+        I'm a solo builder based in Portugal, originally from Brazil. I spent a
+        decade working in teams before deciding to see what I could make on my
+        own, on the side of everything else.
+      </p>
+      <p>
+        I build small, humane software. Four products so far, shipped and
+        maintained by one person: Pensio, GotHired, Gravity, and HobbyCat. I
+        tend to reach for <strong>Rails, Hotwire, and Hotwire Native</strong> —
+        tools built for one person to ship a lot. Postgres on the back, Kamal
+        to deploy, a VPS to run it.
+      </p>
+      <p>
+        My thesis is plain: the internet has enough aggressive,
+        attention-grabbing software. What it's short on is tools that are kind
+        — that assume you will skip days, forget things, change your mind. I
+        try to make those.
+      </p>
+      <p>
+        If any of that resonates, or you want to say hi, I'm easy to find.
+      </p>
+    </div>
 
-    <p>
-      This site is where I keep track of what I'm building, what I'm learning,
-      and the goals I'm chasing. The plan is to ship many small useful things
-      rather than one big ambitious one.
-    </p>
-
-    <h2>Get in touch</h2>
-    <ul>
-      <li><a href="https://github.com/gabrielrubens" target="_blank" rel="noopener">GitHub</a></li>
-      <li><a href="https://www.linkedin.com/in/gabrielrubens" target="_blank" rel="noopener">LinkedIn</a></li>
-    </ul>
-  </section>
+    <aside class="about-aside">
+      <dl>
+        <div><dt>based</dt><dd>Portugal</dd></div>
+        <div><dt>from</dt><dd>Brazil</dd></div>
+        <div>
+          <dt>stack</dt>
+          <dd class="stack">
+            <span>Rails</span><span>Hotwire</span><span>Django</span><span>Postgres</span><span>Kamal</span>
+          </dd>
+        </div>
+        <div><dt>ship count</dt><dd>4 products · all live</dd></div>
+        <div>
+          <dt>elsewhere</dt>
+          <dd>
+            <a href="https://twitter.com/gabrielrubens" target="_blank" rel="noopener">twitter</a> ·
+            <a href="https://www.linkedin.com/in/gabrielrubens" target="_blank" rel="noopener">linkedin</a>
+          </dd>
+        </div>
+      </dl>
+    </aside>
+  </div>
 </Base>

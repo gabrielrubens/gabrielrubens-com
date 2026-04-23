@@ -1,0 +1,23 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  projects: CollectionEntry<'projects'>[];
+}
+
+const { projects } = Astro.props;
+---
+<div class="now-strip">
+  {projects.map((p) => {
+    const { title, status, palette, now, launched } = p.data;
+    const desc = now ?? launched ?? '—';
+    return (
+      <a class="now-row" href={`/projects/${p.id}`}>
+        <span class="now-dot" style={`background:${palette.accent}`}></span>
+        <span class="now-name">{title}</span>
+        <span class="now-desc">{desc}</span>
+        <span class={`now-status status-${status}`} style={`color:${palette.accent}`}>{status}</span>
+      </a>
+    );
+  })}
+</div>

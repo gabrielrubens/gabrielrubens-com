@@ -1,53 +1,74 @@
 ---
 import Base from '../layouts/Base.astro';
 import ProjectCard from '../components/ProjectCard.astro';
+import NowStrip from '../components/NowStrip.astro';
+import Coda from '../components/Coda.astro';
 import { getCollection } from 'astro:content';
 
 const projects = (await getCollection('projects')).sort(
   (a, b) => a.data.order - b.data.order
 );
 
-const posts = (await getCollection('writing', ({ data }) => !data.draft))
-  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())
-  .slice(0, 3);
+const posts = (await getCollection('writing', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime()
+);
+
+const latest = posts[0];
+const latestPost = latest
+  ? {
+      title: latest.data.title,
+      slug: latest.id,
+      date: latest.data.pubDate
+        .toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })
+        .toLowerCase(),
+    }
+  : null;
 ---
-<Base title="Gabriel Rubens">
-  <section class="hero">
-    <h1>Hi, I'm Gabriel.</h1>
-    <p class="lead">
-      I'm a software developer based in Portugal, building small, useful products
-      on the side of a full-time job. This is where I keep track of what I ship.
+<Base title="Gabriel Rubens — builder">
+  <div class="hero">
+    <h1>Four small tools, <em>made by hand</em>.</h1>
+    <p class="lede">
+      I'm Gabriel — a solo builder in Portugal. These are the things I'm shipping
+      right now, on the side of everything else.
     </p>
-  </section>
 
-  <section class="section">
-    <div class="section-head">
-      <h2>Projects</h2>
-      <a href="/projects" class="more">See all →</a>
+    <div class="hero-products">
+      {projects.map((p) => (
+        <a href={`/projects/${p.id}`}>
+          <div class="pmark" style={`background:${p.data.palette.bg}`}>
+            {p.data.icon && <img src={p.data.icon} alt="" />}
+          </div>
+          <div>
+            <div class="pname">{p.data.title}</div>
+            {p.data.category && <div class="pfoot">{p.data.category}</div>}
+          </div>
+          <div class="pfoot">· {p.data.status}</div>
+        </a>
+      ))}
     </div>
-    <div class="project-grid">
-      {projects.slice(0, 4).map((p) => <ProjectCard project={p} />)}
-    </div>
-  </section>
 
-  <section class="section">
-    <div class="section-head">
-      <h2>Writing</h2>
-      <a href="/writing" class="more">Archive →</a>
+    <span class="currently" style="margin-top:1.5rem;">
+      <span class="pulse"></span>
+      <span>April&nbsp;2026 — <b>shipping HobbyCat public beta</b></span>
+    </span>
+
+    <div style="margin-top:1.5rem;">
+      <NowStrip projects={projects} />
     </div>
-    {posts.length === 0 ? (
-      <div class="empty-state">First post coming soon. Building in public starts here.</div>
-    ) : (
-      <ul class="post-list">
-        {posts.map((post) => (
-          <li>
-            <a href={`/writing/${post.id}`}>{post.data.title}</a>
-            <div class="date">
-              {post.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
-            </div>
-          </li>
-        ))}
-      </ul>
-    )}
-  </section>
+  </div>
+
+  <div class="section">
+    <div class="section-head">
+      <div>
+        <div class="eyebrow">// featured work</div>
+        <h2>Four products, <em>all live</em>.</h2>
+      </div>
+      <a href="/projects" class="more">see all →</a>
+    </div>
+    <div class="projects">
+      {projects.map((p) => <ProjectCard project={p} />)}
+    </div>
+  </div>
+
+  <Coda variant="home" latestPost={latestPost} />
 </Base>

@@ -1,0 +1,12 @@
+---
+interface Props {
+  status: 'live' | 'beta' | 'building' | 'paused';
+  accent?: string;
+}
+
+const { status, accent } = Astro.props;
+const style = accent
+  ? `color:${accent};border-color:color-mix(in oklch, ${accent} 40%, transparent);`
+  : undefined;
+---
+<span class={`status status-${status}`} style={style}>{status}</span>

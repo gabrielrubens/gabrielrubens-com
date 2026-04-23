@@ -1,7 +1,5 @@
 ---
 import '../styles/global.css';
-import Nav from '../components/Nav.astro';
-import Footer from '../components/Footer.astro';
 
 interface Props {
   title: string;
@@ -10,10 +8,20 @@ interface Props {
 
 const {
   title,
-  description = "Gabriel Rubens — solo builder shipping small, useful products from Portugal.",
+  description = "Gabriel Rubens — solo builder shipping small, useful software from Portugal.",
 } = Astro.props;
 
 const canonical = new URL(Astro.url.pathname, Astro.site).toString();
+const pathname = Astro.url.pathname.replace(/\/$/, '') || '/';
+
+const navLinks = [
+  { href: '/',                 label: 'home',     match: (p: string) => p === '/' },
+  { href: '/projects',         label: 'projects', match: (p: string) => p.startsWith('/projects') },
+  { href: '/writing',          label: 'writing',  match: (p: string) => p.startsWith('/writing') },
+  { href: '/impossible-list',  label: 'impossible list', match: (p: string) => p.startsWith('/impossible-list') },
+  { href: '/about',            label: 'about',    match: (p: string) => p === '/about' },
+  { href: '/uses',             label: 'uses',     match: (p: string) => p === '/uses' },
+];
 ---
 <!doctype html>
 <html lang="en">
@@ -29,12 +37,30 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonical} />
     <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
-    <Nav />
-    <main>
-      <slot />
-    </main>
-    <Footer />
+    <div class="shell">
+      <aside class="chrome">
+        <a href="/" class="wordmark">
+          Gabriel<br /><em>Rubens.</em>
+        </a>
+        <div class="meta-line"><span class="dot"></span>portugal · via brazil</div>
+        <nav class="primary" aria-label="Primary">
+          {navLinks.map(({ href, label, match }) => (
+            <a href={href} aria-current={match(pathname) ? 'page' : undefined}>{label}</a>
+          ))}
+        </nav>
+      </aside>
+      <main>
+        <slot />
+      </main>
+    </div>
   </body>
 </html>

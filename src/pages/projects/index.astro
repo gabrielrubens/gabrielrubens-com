@@ -1,6 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 import ProjectCard from '../../components/ProjectCard.astro';
+import Coda from '../../components/Coda.astro';
 import { getCollection } from 'astro:content';
 
 const projects = (await getCollection('projects')).sort(
@@ -9,19 +10,48 @@ const projects = (await getCollection('projects')).sort(
 ---
 <Base
   title="Projects — Gabriel Rubens"
-  description="Small products I've built and shipped as a solo developer."
+  description="Four small products I've built and shipped solo."
 >
-  <section class="hero">
-    <h1>Projects</h1>
-    <p class="lead">
-      Everything I've built, shipped, or am currently working on. Most are Rails
-      + Hotwire Native apps deployed with Kamal 2 on a single VPS.
-    </p>
-  </section>
+  <div class="page-eyebrow">// projects</div>
+  <h1 class="page-title">Everything I've <em>shipped</em>.</h1>
+  <p class="page-lede">
+    Four products built solo, evenings and weekends. Same stack, same
+    philosophy: small software that respects you. Click through to read the
+    long story.
+  </p>
 
-  <section class="section">
-    <div class="project-grid">
-      {projects.map((p) => <ProjectCard project={p} />)}
-    </div>
-  </section>
+  <div class="filters" role="tablist">
+    <button class="chip" aria-pressed="true" data-filter="all">all</button>
+    <button class="chip" aria-pressed="false" data-filter="live">live</button>
+    <button class="chip" aria-pressed="false" data-filter="beta">beta</button>
+    <button class="chip" aria-pressed="false" data-filter="building">building</button>
+  </div>
+
+  <div class="projects" id="projects-grid">
+    {projects.map((p) => (
+      <div data-status={p.data.status}>
+        <ProjectCard project={p} />
+      </div>
+    ))}
+  </div>
+
+  <Coda variant="projects" />
 </Base>
+
+<script>
+  const chips = document.querySelectorAll<HTMLButtonElement>('.filters .chip');
+  const grid = document.getElementById('projects-grid');
+
+  chips.forEach((chip) => {
+    chip.addEventListener('click', () => {
+      chips.forEach((c) => c.setAttribute('aria-pressed', c === chip ? 'true' : 'false'));
+      const f = chip.dataset.filter ?? 'all';
+      if (!grid) return;
+      Array.from(grid.children).forEach((child) => {
+        const el = child as HTMLElement;
+        const status = el.dataset.status ?? '';
+        el.style.display = f === 'all' || status === f ? '' : 'none';
+      });
+    });
+  });
+</script>

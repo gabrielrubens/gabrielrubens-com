@@ -4,8 +4,20 @@ tagline: A home for your hobbies — track progress, log sessions, share the cra
 status: beta
 url: https://hobbycat.app
 stack: [Rails, Hotwire, Hotwire Native, Postgres, Kamal]
+platforms: "Web · iOS · Android"
+launched: "Feb 2026"
+now: "Public beta opening soon"
+category: hobbies
 featured: true
-order: 4
+order: 2
+icon: /assets/hobbycat.png
+palette:
+  bg:     "#fbe3e8"
+  ink:    "#3a0e1c"
+  ink2:   "#6b2a3c"
+  dot:    "#f3c7d1"
+  mark:   "#c8345d"
+  accent: "#c8345d"
 ---
 
 ## What it is

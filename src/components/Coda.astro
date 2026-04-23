@@ -1,0 +1,41 @@
+---
+interface Props {
+  latestPost?: { title: string; slug: string; date: string } | null;
+  variant?: 'home' | 'projects' | 'writing' | 'simple';
+}
+
+const { latestPost = null, variant = 'home' } = Astro.props;
+---
+<div class="coda">
+  {variant === 'home' && (
+    <>
+      <div class="writing-latest">
+        {latestPost ? (
+          <>Writing: <a href={`/writing/${latestPost.slug}`}>{latestPost.title}</a> <em>— {latestPost.date}</em></>
+        ) : (
+          <>Writing: <a href="/writing">Hello, world</a> <em>— coming soon</em></>
+        )}
+      </div>
+      <div class="links">
+        <a href="https://twitter.com/gabrielrubens" target="_blank" rel="noopener">twitter</a>
+        <a href="https://www.linkedin.com/in/gabrielrubens" target="_blank" rel="noopener">linkedin</a>
+        <a href="/podcast">podcast ↗</a>
+      </div>
+    </>
+  )}
+  {variant === 'projects' && (
+    <>
+      <div class="writing-latest">Want to build together? <a href="https://twitter.com/gabrielrubens">@gabrielrubens</a></div>
+      <div class="links"><a href="/">← back home</a></div>
+    </>
+  )}
+  {variant === 'writing' && (
+    <>
+      <div class="writing-latest">RSS coming soon. For now, follow along on <a href="https://twitter.com/gabrielrubens">twitter</a>.</div>
+      <div class="links"><a href="/">← back home</a></div>
+    </>
+  )}
+  {variant === 'simple' && (
+    <div class="links"><a href="/">← back home</a></div>
+  )}
+</div>

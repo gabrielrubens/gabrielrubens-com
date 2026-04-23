@@ -4,8 +4,20 @@ tagline: A journaling app focused on the review, not just the writing.
 status: live
 url: https://pensio.app
 stack: [Django, Python, Postgres, Hotwire Native]
+platforms: "Web · iOS · Android"
+launched: "Feb 2025"
+now: "v1.0 shipped"
+category: journaling
 featured: true
 order: 1
+icon: /assets/pensio.png
+palette:
+  bg:     "#f5ece2"
+  ink:    "#2a1a0e"
+  ink2:   "#5c4133"
+  dot:    "#ecd4bd"
+  mark:   "#c0562b"
+  accent: "#c0562b"
 ---
 
 ## What it is

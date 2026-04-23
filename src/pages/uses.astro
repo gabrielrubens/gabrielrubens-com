@@ -3,35 +3,64 @@ import Base from '../layouts/Base.astro';
 ---
 <Base
   title="Uses — Gabriel Rubens"
-  description="The tools, hardware, and software I use every day."
+  description="The tools I use every day to build and ship."
 >
-  <section class="hero">
-    <h1>Uses</h1>
-    <p class="lead">
-      The tools I reach for when shipping things. Inspired by
-      <a href="https://uses.tech" target="_blank" rel="noopener">uses.tech</a>.
-    </p>
-  </section>
+  <div class="page-eyebrow">// uses</div>
+  <h1 class="page-title">What I <em>use</em>.</h1>
+  <p class="page-lede">
+    A short, honest list of the tools I actually reach for. Nothing here is
+    sponsored. This page exists because I find other people's <code>/uses</code>
+    pages genuinely useful, so here's mine.
+  </p>
 
-  <section class="prose">
-    <h2>Stack</h2>
-    <ul>
-      <li><strong>Backend:</strong> Rails 8 with Hotwire and Solid Queue/Cache.</li>
-      <li><strong>Mobile:</strong> Hotwire Native for iOS and Android.</li>
-      <li><strong>Database:</strong> PostgreSQL.</li>
-      <li><strong>Hosting:</strong> Hostinger VPS with Kamal 2.</li>
-      <li><strong>CDN / DNS:</strong> Cloudflare.</li>
-    </ul>
+  <div class="uses-grid">
+    <div class="uses-card">
+      <h3>Hardware<em>.</em></h3>
+      <ul>
+        <li><b>MacBook Pro 14"</b><span class="note">M-series</span></li>
+        <li><b>External 27" display</b><span class="note">one, not two</span></li>
+        <li><b>Mechanical keyboard</b><span class="note">quiet switches</span></li>
+        <li><b>iPhone</b><span class="note">for testing</span></li>
+        <li><b>Android phone</b><span class="note">cheap, for testing</span></li>
+      </ul>
+    </div>
 
-    <h2>Editor</h2>
-    <ul>
-      <li>Claude Code for most of the heavy lifting.</li>
-      <li>VS Code for quick edits.</li>
-    </ul>
+    <div class="uses-card">
+      <h3>Editor <em>&amp; tools</em></h3>
+      <ul>
+        <li><b>VS Code</b><span class="note">daily</span></li>
+        <li><b>Claude Code</b><span class="note">pair</span></li>
+        <li><b>iTerm2 + tmux</b><span class="note">terminal</span></li>
+        <li><b>Linear</b><span class="note">tasks</span></li>
+        <li><b>Figma</b><span class="note">design</span></li>
+      </ul>
+    </div>
 
-    <h2>This site</h2>
-    <ul>
-      <li>Built with Astro, deployed on Cloudflare Pages.</li>
-    </ul>
-  </section>
+    <div class="uses-card">
+      <h3>Stack<em>.</em></h3>
+      <ul>
+        <li><b>Rails</b><span class="note">backend</span></li>
+        <li><b>Hotwire</b><span class="note">frontend</span></li>
+        <li><b>Hotwire Native</b><span class="note">mobile</span></li>
+        <li><b>Postgres</b><span class="note">data</span></li>
+        <li><b>Kamal</b><span class="note">deploys</span></li>
+        <li><b>Hostinger</b><span class="note">hosting</span></li>
+      </ul>
+    </div>
+
+    <div class="uses-card">
+      <h3>Desk <em>things</em></h3>
+      <ul>
+        <li><b>Espresso machine</b><span class="note">mornings</span></li>
+        <li><b>Paper notebook</b><span class="note">thinking</span></li>
+        <li><b>Muji 0.5 pen</b><span class="note">black ink</span></li>
+        <li><b>Noise-cancelling headphones</b><span class="note">focus</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <p class="uses-disclaimer">
+    Placeholder list — I'll replace with the real setup when I get around to it.
+    Inspired by <a href="https://uses.tech" target="_blank" rel="noopener">uses.tech</a>.
+  </p>
 </Base>

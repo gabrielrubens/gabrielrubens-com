@@ -1,40 +1,48 @@
 ---
 import Base from '../../layouts/Base.astro';
+import Coda from '../../components/Coda.astro';
 import { getCollection } from 'astro:content';
 
 const posts = (await getCollection('writing', ({ data }) => !data.draft)).sort(
   (a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime()
 );
+
+const formatDate = (d: Date) =>
+  d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).toLowerCase();
 ---
 <Base
   title="Writing — Gabriel Rubens"
-  description="Notes on building small products, Rails, Hotwire Native, and indie hacking."
+  description="Occasional writing on building software solo."
 >
-  <section class="hero">
-    <h1>Writing</h1>
-    <p class="lead">
-      Notes on building small products, Rails + Hotwire Native, and indie hacking
-      while holding a full-time job.
-    </p>
-  </section>
+  <div class="page-eyebrow">// writing</div>
+  <h1 class="page-title">Notes from <em>the workshop</em>.</h1>
+  <p class="page-lede">
+    Occasional writing on building software solo, Rails &amp; Hotwire, and the slow
+    practice of shipping small things.
+  </p>
 
-  <section class="section">
-    {posts.length === 0 ? (
-      <div class="empty-state">
-        No posts yet. The first one is coming soon.
-      </div>
-    ) : (
-      <ul class="post-list">
-        {posts.map((post) => (
-          <li>
-            <a href={`/writing/${post.id}`}>{post.data.title}</a>
-            <div class="date">
-              {post.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
+  {posts.length === 0 ? (
+    <div class="empty-card">
+      <p>No posts yet. The first one is coming soon.</p>
+    </div>
+  ) : (
+    <ul class="post-index">
+      {posts.map((post) => (
+        <li>
+          <a href={`/writing/${post.id}`}>
+            <div class="post-row">
+              <div class="post-date">{formatDate(post.data.pubDate)}</div>
+              <div class="post-body">
+                <h3>{post.data.title}<em>.</em></h3>
+                <p>{post.data.description}</p>
+              </div>
+              <div class="post-arr">→</div>
             </div>
-            <p>{post.data.description}</p>
-          </li>
-        ))}
-      </ul>
-    )}
-  </section>
+          </a>
+        </li>
+      ))}
+    </ul>
+  )}
+
+  <Coda variant="writing" />
 </Base>

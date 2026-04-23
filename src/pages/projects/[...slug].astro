@@ -2,46 +2,108 @@
 import { getCollection, render } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
 import Base from '../../layouts/Base.astro';
+import StatusPill from '../../components/StatusPill.astro';
 
 export async function getStaticPaths() {
   const projects = await getCollection('projects');
   return projects.map((project) => ({
     params: { slug: project.id },
-    props: { project },
+    props: { project, projects },
   }));
 }
 
 interface Props {
   project: CollectionEntry<'projects'>;
+  projects: CollectionEntry<'projects'>[];
 }
 
-const { project } = Astro.props;
+const { project, projects } = Astro.props;
 const { Content } = await render(project);
-const { title, tagline, url, stack, status, launchedAt } = project.data;
+const { title, tagline, url, stack, status, platforms, launched, icon, palette } = project.data;
+
+const domain = url ? url.replace(/^https?:\/\//, '').replace(/\/$/, '') : '';
+const shotLabel = `${title.toLowerCase()}.app`;
+
+const rootStyle = [
+  `--detail-bg:${palette.bg}`,
+  `--detail-accent:${palette.accent}`,
+].join(';');
+
+const related = projects
+  .filter((p) => p.id !== project.id)
+  .sort((a, b) => a.data.order - b.data.order)
+  .slice(0, 3);
 ---
 <Base title={`${title} — Gabriel Rubens`} description={tagline}>
-  <article class="project-detail">
-    <header>
-      <a href="/projects" class="more">← All projects</a>
-      <h1>{title}</h1>
-      <p class="lead">{tagline}</p>
-      <div class="meta">
-        <span class={`badge badge-${status}`}>{status}</span>
-        {stack.map((s) => <span class="tag">{s}</span>)}
-        {launchedAt && (
-          <span class="tag">
-            Launched {launchedAt.toLocaleDateString('en-US', { year: 'numeric', month: 'short' })}
-          </span>
-        )}
+  <div style={rootStyle}>
+    <a href="/projects" class="back">← projects</a>
+
+    <header class="detail-head">
+      <div style="display:flex;gap:1rem;align-items:center">
+        <div class="detail-mark" style={`background:${palette.bg};border-color:color-mix(in oklch, ${palette.accent} 20%, transparent)`}>
+          {icon && <img src={icon} alt="" />}
+        </div>
+        <div>
+          <h1>{title}<em>.</em></h1>
+          <p class="tagline">{tagline}</p>
+        </div>
       </div>
       {url && (
-        <a class="cta" href={url} target="_blank" rel="noopener">
-          Visit {title} →
+        <a class="detail-cta" href={url} target="_blank" rel="noopener">
+          Visit {domain} <span>↗</span>
         </a>
       )}
     </header>
-    <div class="prose">
-      <Content />
+
+    <div class="detail-body">
+      <div class="screenshot" data-shot-label={shotLabel}></div>
+
+      <article class="prose">
+        <Content />
+      </article>
+
+      <aside class="detail-aside">
+        <dl>
+          <div>
+            <dt>status</dt>
+            <dd><StatusPill status={status} accent={palette.accent} /></dd>
+          </div>
+          {launched && (
+            <div>
+              <dt>launched</dt>
+              <dd>{launched}</dd>
+            </div>
+          )}
+          {platforms && (
+            <div>
+              <dt>platforms</dt>
+              <dd>{platforms}</dd>
+            </div>
+          )}
+          <div>
+            <dt>stack</dt>
+            <dd class="stack">{stack.map((s) => <span>{s}</span>)}</dd>
+          </div>
+          {url && (
+            <div>
+              <dt>where</dt>
+              <dd><a href={url} target="_blank" rel="noopener">{domain} ↗</a></dd>
+            </div>
+          )}
+        </dl>
+      </aside>
     </div>
-  </article>
+
+    <div class="related">
+      <h4>// other projects</h4>
+      <div class="related-grid">
+        {related.map((r) => (
+          <a href={`/projects/${r.id}`}>
+            <div class="n">{r.data.title}</div>
+            <div class="t">{r.data.tagline.split(' ').slice(0, 6).join(' ').toLowerCase()}…</div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </div>
 </Base>

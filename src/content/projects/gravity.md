@@ -4,8 +4,20 @@ tagline: A habit and routine companion that meets you where you are.
 status: live
 url: https://mygravity.app
 stack: [Rails, Hotwire, Hotwire Native, Postgres, Kamal]
+platforms: "Web · iOS · Android"
+launched: "Jun 2024"
+now: "Live · cross-device sync + offline queue"
+category: habits
 featured: true
 order: 3
+icon: /assets/gravity.png
+palette:
+  bg:     "#1b1f3a"
+  ink:    "#e8e9f4"
+  ink2:   "#b4b6cc"
+  dot:    "#2e3258"
+  mark:   "#ffb14a"
+  accent: "#ffb14a"
 ---
 
 ## What it is
