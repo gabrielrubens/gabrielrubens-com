@@ -25,6 +25,8 @@ const projects = defineCollection({
     featured: z.boolean().default(false),
     order: z.number().default(100),
     icon: z.string().optional(),
+    screenshot: z.string().optional(),
+    screenshotOrientation: z.enum(['portrait', 'landscape']).optional(),
     palette,
   }),
 });

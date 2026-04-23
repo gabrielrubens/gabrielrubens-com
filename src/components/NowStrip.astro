@@ -10,7 +10,7 @@ const { projects } = Astro.props;
 <div class="now-strip">
   {projects.map((p) => {
     const { title, status, palette, now, launched } = p.data;
-    const desc = now ?? launched ?? '—';
+    const desc = now ?? launched ?? '';
     return (
       <a class="now-row" href={`/projects/${p.id}`}>
         <span class="now-dot" style={`background:${palette.accent}`}></span>

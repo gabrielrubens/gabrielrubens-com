@@ -6,7 +6,7 @@ url: https://pensio.app
 stack: [Django, Python, Postgres, Hotwire Native]
 platforms: "Web · iOS · Android · Obsidian"
 launched: "Jan 2026"
-now: "Live · growing steadily"
+now: "Live, growing steadily"
 category: journaling
 featured: true
 order: 1
@@ -22,7 +22,7 @@ palette:
 
 ## What it is
 
-Pensio reads your journal the way a thoughtful friend would — across years,
+Pensio reads your journal the way a thoughtful friend would, across years,
 not just the entry in front of it. It picks up the emotions, the people,
 the recurring themes, and surfaces connections you'd never notice on your
 own. You keep writing in markdown (in Obsidian, a folder, or Pensio itself),
@@ -30,21 +30,21 @@ and the insight layer lives on top of it.
 
 ## Why I built it
 
-It started with a moment re-reading a journal entry from three years prior
-— meeting a past version of myself on the street. I wanted to see more of
+It started with a moment re-reading a journal entry from three years prior.
+Meeting a past version of myself on the street. I wanted to see more of
 that. So I converted four hundred entries into markdown, put them in a
 folder, and tried to build the mirror I wanted.
 
 The obvious approaches failed. Dumping entries into a local LLM gave
-summaries with no context. Retrieval-Augmented Generation — the standard
-"chat with your docs" pattern — was disastrous: it treats each entry as a
+summaries with no context. Retrieval-Augmented Generation, the standard
+"chat with your docs" pattern, was disastrous: it treats each entry as a
 knowledge-base fact and can't see that two entries about the same person,
 written six months apart, are the same story.
 
 So I built a custom pipeline in Python. Instead of embeddings over raw text,
-it extracts *structured meaning* from every entry — emotions, themes, people,
-temporal focus — and assembles them into a graph. The AI reasons across
-that graph, not across text chunks.
+it extracts *structured meaning* from every entry: emotions, themes, people,
+temporal focus. Those signals assemble into a graph, and the AI reasons
+across that graph, not across text chunks.
 
 The validation moment: the system connected two entries two years apart by
 the emotion running between them. It showed me something I'd lived but
@@ -62,4 +62,4 @@ own versions of that moment, and Pensio became a product.
 - **Native:** Hotwire Native wrappers for iOS and Android.
 - **Infra:** PostgreSQL, Docker, VPS.
 
-*Screenshot placeholder — real screenshots coming.*
+*Screenshot placeholder. Real screenshots coming.*

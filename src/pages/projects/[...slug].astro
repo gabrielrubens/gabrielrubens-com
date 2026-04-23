@@ -19,7 +19,7 @@ interface Props {
 
 const { project, projects } = Astro.props;
 const { Content } = await render(project);
-const { title, tagline, url, stack, status, platforms, launched, icon, palette } = project.data;
+const { title, tagline, url, stack, status, platforms, launched, icon, palette, screenshot, screenshotOrientation } = project.data;
 
 const domain = url ? url.replace(/^https?:\/\//, '').replace(/\/$/, '') : '';
 const shotLabel = `${title.toLowerCase()}.app`;
@@ -34,7 +34,7 @@ const related = projects
   .sort((a, b) => a.data.order - b.data.order)
   .slice(0, 3);
 ---
-<Base title={`${title} — Gabriel Rubens`} description={tagline}>
+<Base title={`${title} · Gabriel Rubens`} description={tagline}>
   <div style={rootStyle}>
     <a href="/projects" class="back">← projects</a>
 
@@ -56,7 +56,12 @@ const related = projects
     </header>
 
     <div class="detail-body">
-      <div class="screenshot" data-shot-label={shotLabel}></div>
+      <div
+        class:list={['screenshot', { 'has-image': !!screenshot, [`is-${screenshotOrientation}`]: !!screenshotOrientation }]}
+        data-shot-label={shotLabel}
+      >
+        {screenshot && <img class="shot-image" src={screenshot} alt={`${title} screenshot`} loading="lazy" />}
+      </div>
 
       <article class="prose">
         <Content />

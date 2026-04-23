@@ -11,9 +11,9 @@ const { latestPost = null, variant = 'home' } = Astro.props;
     <>
       <div class="writing-latest">
         {latestPost ? (
-          <>Writing: <a href={`/writing/${latestPost.slug}`}>{latestPost.title}</a> <em>— {latestPost.date}</em></>
+          <>Writing: <a href={`/writing/${latestPost.slug}`}>{latestPost.title}</a> <em>· {latestPost.date}</em></>
         ) : (
-          <>Writing: <a href="/writing">Hello, world</a> <em>— coming soon</em></>
+          <>Writing: <a href="/writing">Hello, world</a> <em>· coming soon</em></>
         )}
       </div>
       <div class="links">

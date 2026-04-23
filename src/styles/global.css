@@ -1,11 +1,11 @@
 /* ============================================================
-   gabrielrubens.com — tokens + components
+   gabrielrubens.com · tokens + components
    Ported from Claude Design handoff. Accent baked to terracotta,
    display font baked to sans, dark theme auto via prefers-color-scheme.
    ============================================================ */
 
 :root {
-  /* Paper + ink — warm neutral */
+  /* Paper + ink, warm neutral */
   --paper:      #f2f2f0;
   --paper-2:    #e9e9e6;
   --paper-3:    #dedeDA;
@@ -14,7 +14,7 @@
   --muted:      #6f6f6c;
   --line:       #d6d6d1;
 
-  /* Accent — terracotta (final) */
+  /* Accent: terracotta (final) */
   --accent:       #c0562b;
   --accent-soft:  #f1dcc8;
   --accent-ink:   #ffffff;
@@ -37,7 +37,7 @@
 }
 
 /* Dark theme is available as an opt-in via html[data-theme="dark"].
-   No auto-switch — default is always the warm light palette. */
+   No auto-switch. Default is always the warm light palette. */
 html[data-theme="dark"] {
   --paper:      #121211;
   --paper-2:    #1a1a19;
@@ -84,7 +84,7 @@ body::before {
 }
 
 /* ============================================================
-   Shell — sidebar wordmark + content
+   Shell: sidebar wordmark + content
    ============================================================ */
 .shell {
   position: relative;
@@ -500,7 +500,7 @@ main { min-width: 0; }
 }
 
 /* ============================================================
-   PROJECTS INDEX — filter chips
+   PROJECTS INDEX: filter chips
    ============================================================ */
 .filters {
   display: flex;
@@ -626,7 +626,7 @@ main { min-width: 0; }
   overflow: hidden;
 }
 .screenshot::after {
-  content: "[ " attr(data-shot-label) " — primary view ]";
+  content: "[ " attr(data-shot-label) " · primary view ]";
   font-family: var(--mono);
   font-size: 0.78rem;
   color: var(--muted);
@@ -634,6 +634,22 @@ main { min-width: 0; }
   padding: 0.35rem 0.75rem;
   border-radius: 6px;
   border: 1px solid var(--line);
+}
+
+.screenshot.has-image {
+  background: var(--detail-bg, var(--paper-2));
+}
+.screenshot.has-image::after { display: none; }
+.screenshot .shot-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.screenshot.is-portrait .shot-image {
+  object-fit: contain;
+  padding: 1.5rem;
 }
 
 .prose {
