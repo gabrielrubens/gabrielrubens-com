@@ -1,12 +1,12 @@
 ---
 title: Pensio
-tagline: A journaling app focused on the review, not just the writing.
+tagline: An AI that actually understands your journal.
 status: live
 url: https://pensio.app
 stack: [Django, Python, Postgres, Hotwire Native]
-platforms: "Web · iOS · Android"
-launched: "Feb 2025"
-now: "v1.0 shipped"
+platforms: "Web · iOS · Android · Obsidian"
+launched: "Jan 2026"
+now: "Live · growing steadily"
 category: journaling
 featured: true
 order: 1
@@ -22,15 +22,44 @@ palette:
 
 ## What it is
 
-Pensio is a journaling app built around the idea that the real value of journaling comes from *looking back*, not just writing. It provides structured review prompts, AI-assisted insights, and cross-device sync.
+Pensio reads your journal the way a thoughtful friend would — across years,
+not just the entry in front of it. It picks up the emotions, the people,
+the recurring themes, and surfaces connections you'd never notice on your
+own. You keep writing in markdown (in Obsidian, a folder, or Pensio itself),
+and the insight layer lives on top of it.
 
 ## Why I built it
 
-Most journaling apps are great at capture but terrible at reflection. Entries disappear into a timeline you never revisit. Pensio flips that: every entry is designed to surface again at the right moment.
+It started with a moment re-reading a journal entry from three years prior
+— meeting a past version of myself on the street. I wanted to see more of
+that. So I converted four hundred entries into markdown, put them in a
+folder, and tried to build the mirror I wanted.
 
-## Stack
+The obvious approaches failed. Dumping entries into a local LLM gave
+summaries with no context. Retrieval-Augmented Generation — the standard
+"chat with your docs" pattern — was disastrous: it treats each entry as a
+knowledge-base fact and can't see that two entries about the same person,
+written six months apart, are the same story.
 
-- Django on the backend
-- Hotwire Native wrapping the web app for iOS and Android
-- PostgreSQL
-- Deployed via Docker on a VPS
+So I built a custom pipeline in Python. Instead of embeddings over raw text,
+it extracts *structured meaning* from every entry — emotions, themes, people,
+temporal focus — and assembles them into a graph. The AI reasons across
+that graph, not across text chunks.
+
+The validation moment: the system connected two entries two years apart by
+the emotion running between them. It showed me something I'd lived but
+hadn't seen. I showed it to my partner and a few friends, they had their
+own versions of that moment, and Pensio became a product.
+
+## How it's built
+
+- **Extraction pipeline:** Python scripts that turn each entry into structured
+  signals (emotion, people, themes, temporal focus).
+- **Graph layer:** connections built across the entire journal history, not a
+  vector index.
+- **Backend:** Django REST, multi-vault with row-level isolation.
+- **Obsidian plugin:** real-time sync, JWT auth, offline queue, selective folders.
+- **Native:** Hotwire Native wrappers for iOS and Android.
+- **Infra:** PostgreSQL, Docker, VPS.
+
+*Screenshot placeholder — real screenshots coming.*

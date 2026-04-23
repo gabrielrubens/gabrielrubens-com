@@ -36,20 +36,20 @@
   --max:    1160px;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --paper:      #121211;
-    --paper-2:    #1a1a19;
-    --paper-3:    #242422;
-    --ink:        #f3eee3;
-    --ink-2:      #c9c3b4;
-    --muted:      #8a8373;
-    --line:       #2c2a26;
+/* Dark theme is available as an opt-in via html[data-theme="dark"].
+   No auto-switch — default is always the warm light palette. */
+html[data-theme="dark"] {
+  --paper:      #121211;
+  --paper-2:    #1a1a19;
+  --paper-3:    #242422;
+  --ink:        #f3eee3;
+  --ink-2:      #c9c3b4;
+  --muted:      #8a8373;
+  --line:       #2c2a26;
 
-    --accent:      #e07547;
-    --accent-soft: #2a1a12;
-    --accent-ink:  #121211;
-  }
+  --accent:      #e07547;
+  --accent-soft: #2a1a12;
+  --accent-ink:  #121211;
 }
 
 /* ============================================================

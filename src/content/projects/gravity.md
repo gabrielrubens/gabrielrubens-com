@@ -1,13 +1,13 @@
 ---
 title: Gravity
-tagline: A habit and routine companion that meets you where you are.
+tagline: Stay close to the people you love.
 status: live
 url: https://mygravity.app
 stack: [Rails, Hotwire, Hotwire Native, Postgres, Kamal]
 platforms: "Web · iOS · Android"
-launched: "Jun 2024"
-now: "Live · cross-device sync + offline queue"
-category: habits
+launched: "Apr 2026"
+now: "Live · Google Play submission underway"
+category: relationships
 featured: true
 order: 3
 icon: /assets/gravity.png
@@ -22,16 +22,28 @@ palette:
 
 ## What it is
 
-Gravity helps you build routines that stick by focusing on gentle consistency instead of punishing streaks. Cross-device sync, offline queueing, and a mobile-first design.
+Gravity reminds you to reach out to the people you care about — before
+you've drifted too long — and makes acting on it take less than ten seconds.
+You add the people you want to stay in orbit around, and Gravity tells you
+who you're drifting from.
+
+Not a CRM, not a contact manager. One job, done kindly.
 
 ## Why I built it
 
-I kept bouncing off habit trackers that felt more like drill sergeants than partners. Gravity assumes you'll miss days, and makes coming back the default path.
+The people I love don't live near me anymore. Months kept slipping by, and
+I'd realise I hadn't reached out — then feel guilty and still do nothing.
+Every relationship tool I tried either felt like sales software or demanded
+setup I'd never maintain. I wanted a companion that says *"it's been a
+while"*, not *"YOU ARE OVERDUE."*
 
-## Stack
+## How it's built
 
-- Rails 8 with Hotwire
-- Hotwire Native for iOS and Android
-- PostgreSQL
-- Deployed with Kamal 2
-- Cross-tab sync and Level-1.5 offline queue built in
+- **Rails 8** + Hotwire (Turbo + Stimulus)
+- **Hotwire Native** on iOS and Android — one codebase, native push
+- **PostgreSQL** + Kamal 2 on a Hostinger VPS
+- Noticed gem + APNs / FCM for push
+- **Stripe** (web) + **RevenueCat** (native IAP)
+- Cross-tab sync and an offline queue so missed actions catch up quietly
+
+*Screenshot placeholder — real screenshots coming.*

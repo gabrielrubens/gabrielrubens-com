@@ -1,11 +1,11 @@
 ---
 title: HobbyCat
-tagline: A home for your hobbies — track progress, log sessions, share the craft.
+tagline: A calm, playful home for everything you love to do.
 status: beta
 url: https://hobbycat.app
 stack: [Rails, Hotwire, Hotwire Native, Postgres, Kamal]
 platforms: "Web · iOS · Android"
-launched: "Feb 2026"
+launched: "Apr 2026"
 now: "Public beta opening soon"
 category: hobbies
 featured: true
@@ -22,15 +22,34 @@ palette:
 
 ## What it is
 
-HobbyCat is a space to track and share the hobbies you care about — from chess and climbing to woodworking and watercolor. Log sessions, capture progress, and see patterns over time.
+HobbyCat is a home for your hobbies — chess, climbing, woodworking,
+watercolor, whatever you keep coming back to. Log sessions, capture small
+bits of progress, keep a visual library of what you've made. No followers,
+no leaderboards, no streak anxiety.
 
-## Why I built it
+All your hobbies, first-class, side by side.
 
-Hobby tracking usually means either a spreadsheet or a hyper-specific app per activity. HobbyCat treats *all* your hobbies as first-class, and helps you see the whole picture.
+## How it started
 
-## Stack
+HobbyCat is the only product on this page I didn't concept alone. My
+partner had the idea and shaped the whole feel of it — the name, the tone,
+every visual decision, the little cat. She designed it by hand. I'm the
+developer on this one; the soul of the app is hers.
 
-- Rails 8 with Hotwire
-- Hotwire Native for iOS and Android
-- PostgreSQL
-- Deployed with Kamal 2
+## Why we built it
+
+She kept starting hobbies and losing the thread of where she was. Notes
+apps weren't right. Photo libraries weren't right. Hyper-specific trackers
+forced her to pick one activity. She wanted a *craft diary* — not a social
+network, not a productivity tool — that treats every hobby the same way.
+I wanted to build it with her.
+
+## How it's built
+
+- **Rails 8** + Hotwire, with a lot of care around photo handling
+- **Hotwire Native** on iOS and Android
+- **PostgreSQL** + Kamal 2 on a Hostinger VPS
+- **Stripe** via Pay gem (web payments)
+- FCM for Android push, APNs for iOS
+
+*Screenshot placeholder — real screenshots coming.*

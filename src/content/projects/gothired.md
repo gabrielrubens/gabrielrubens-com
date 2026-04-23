@@ -1,12 +1,12 @@
 ---
 title: GotHired
-tagline: AI-powered help for landing your next job.
+tagline: Your AI co-pilot for the job search.
 status: live
 url: https://gothired.ai
 stack: [Rails, Hotwire, Hotwire Native, Postgres, Kamal]
 platforms: "Web · iOS · Android"
-launched: "Oct 2024"
-now: "Live · improving interview prep"
+launched: "Mar 2025"
+now: "Live · iterating on interview prep"
 category: job search
 featured: true
 order: 4
@@ -22,15 +22,26 @@ palette:
 
 ## What it is
 
-GotHired uses AI to help you tailor resumes, prepare for interviews, and navigate the job search more strategically — end-to-end support from application to offer.
+GotHired is an AI-powered companion for the entire job search — not just a
+job board and not just a resume scanner. It matches your resume against real
+job descriptions, scores the fit, rewrites weak sections, drafts personalized
+cover letters, and helps you practice for the interview.
+
+One place to go when "applying for jobs" turns into a second job.
 
 ## Why I built it
 
-Job hunting is high-stakes and mostly solo. The feedback loops are slow and the signals are noisy. GotHired is the coach I wished I had when I was changing roles.
+I watched people I love apply for roles and bounce between five half-helpful
+tools to do it. The tooling was either cold CRM-for-yourself or gamified
+grind. I wanted something that feels like a quietly competent friend sitting
+next to you — honest about what's working, specific about what to change,
+calm in how it says it.
 
-## Stack
+## How it's built
 
-- Rails 8 with Hotwire
-- Hotwire Native for iOS and Android
-- PostgreSQL
-- Deployed with Kamal 2 on a Hostinger VPS
+- **Rails 8** with Hotwire for the UI
+- **Hotwire Native** on iOS and Android — one codebase, native navigation
+- **PostgreSQL** + Kamal 2 on a Hostinger VPS
+- A careful prompt layer behind a handful of LLM providers
+
+*Screenshot placeholder — real screenshots coming.*
