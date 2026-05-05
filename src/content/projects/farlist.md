@@ -1,8 +1,8 @@
 ---
-title: Stretchbook
+title: Farlist
 tagline: A list of stretches. Not tasks.
 status: building
-url: https://stretch.gabrielrubens.com
+url: https://farlist.app
 stack: [Rails, Hotwire, Postgres, Kamal]
 platforms: "Web (native later)"
 now: "V1 in development, waitlist open"
@@ -20,13 +20,15 @@ palette:
 
 ## What it is
 
-Stretchbook is a slow journal of long-arc goals. Not tasks, not habits,
+Farlist is a slow journal of long-arc goals. Not tasks, not habits,
 not a bucket list. *Stretches* — the hard, meaningful things that take
 years. Each one moves through a real lifecycle (Idea → Pursuing → Done →
 Parked), and finishing one earns a sentence, not a checkmark.
 
-The shape of it is deliberately small. Eight fixed life categories. Four
-states. One opinionated public profile at a clean URL.
+The shape of it is deliberately small. Eight fixed categories. Four
+states. And, at the end, a public profile at a clean URL that reads
+like the person who wrote it — the artifact isn't bolted on, it's
+the point.
 
 ## Why I'm building it
 
@@ -52,6 +54,7 @@ first-class citizen, because in real life it always is.
 
 ## Where it is
 
-Pre-launch. The waitlist landing page is live; the app itself is in
-development. The brand will move to **stretchbook.app** when V1 ships.
-This page will get longer once it has something to point at.
+The manifesto and waitlist are live at **[farlist.app](https://farlist.app)**.
+V1 — the actual app, with stretches, the four-state lifecycle, and the
+public profile — is in development. This page will get longer once it
+has something to point at.
