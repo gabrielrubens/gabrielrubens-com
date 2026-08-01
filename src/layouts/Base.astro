@@ -14,6 +14,11 @@ const {
 const canonical = new URL(Astro.url.pathname, Astro.site).toString();
 const pathname = Astro.url.pathname.replace(/\/$/, '') || '/';
 
+// GA4. Production builds only, and only when PUBLIC_GA_ID is set, so localhost and preview
+// builds never pollute the numbers. That contamination is not hypothetical: the portfolio's
+// own Lighthouse CI silently poisoned GotHired's PostHog pageview funnels for weeks.
+const gaId = import.meta.env.PROD ? import.meta.env.PUBLIC_GA_ID : undefined;
+
 const navLinks = [
   { href: '/',                 label: 'home',     match: (p: string) => p === '/' },
   { href: '/projects',         label: 'projects', match: (p: string) => p.startsWith('/projects') },
@@ -51,6 +56,26 @@ const navLinks = [
       href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap"
       rel="stylesheet"
     />
+
+    {gaId && (
+      <>
+        <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`} />
+        <script is:inline define:vars={{ gaId }}>
+          window.dataLayer = window.dataLayer || [];
+          function gtag() { dataLayer.push(arguments); }
+          // Consent Mode v2. Analytics only: every advertising signal stays denied, so nothing
+          // here feeds ad profiles. See docs/analytics.md for what this does and does not cover.
+          gtag('consent', 'default', {
+            ad_storage: 'denied',
+            ad_user_data: 'denied',
+            ad_personalization: 'denied',
+            analytics_storage: 'granted',
+          });
+          gtag('js', new Date());
+          gtag('config', gaId, { anonymize_ip: true });
+        </script>
+      </>
+    )}
   </head>
   <body>
     <div class="shell">
