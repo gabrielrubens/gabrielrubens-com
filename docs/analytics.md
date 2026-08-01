@@ -90,8 +90,43 @@ assuming: had the Action used a service account, it would have needed Viewer on 
 `ga4_property_id` is blank. Now that the id is filled the weekly collection is **28 steps** instead
 of 27, and the site appears in the Monday digest.
 
-## What is still not measured
+## Search Console: not connected, and the reason is simple
 
-Nothing knows how a post performed *before* the click: no impressions, and no Search Console
-either, because it is not confirmed whether a GSC property exists for this domain. Add
-`gsc_property` to the yml and a `gsc` step in `run_all.py` if you verify one.
+**There is no property for this domain.** Confirmed 2026-08-01 by listing everything the
+`gsc-token` can read: 8 properties, and `gabrielrubens.com` is not among them. So there was nothing
+to connect, only something to create.
+
+Until one exists, nothing knows how a post performed *before* the click. GA4 tells you a visit
+happened; only Search Console tells you the post was shown 400 times and clicked 3, which is the
+difference between "nobody is interested" and "nobody can find it". That distinction is exactly
+what the GotHired indexation story was about.
+
+### Creating it
+
+Use a **domain property** to match the rest of the portfolio (every other app is `sc-domain:`),
+because it covers apex, `www` and both protocols in one:
+
+```
+sc-domain:gabrielrubens.com
+```
+
+Verification needs a DNS TXT record. The domain is on Cloudflare, which Search Console supports as
+a one-click verification partner, so this is usually a couple of clicks rather than a manual record.
+
+A **URL-prefix** property (`https://gabrielrubens.com/`) is the fallback, and it has one advantage
+now that did not exist before today: with GA4 installed, Search Console can verify via the Google
+Analytics method, no DNS at all. It is the weaker choice though, since it does not cover other
+protocol or subdomain variants.
+
+### After verifying
+
+Put the id on the `gsc_property` line in `~/dev/analytics/apps/gabrielrubens.yml`. **Nothing else
+needs changing.** `run_all.py` already carries a guarded `gsc` step for this app, so weekly
+collection goes from 28 steps to 29 on its own.
+
+⚠️ Do not fill that line before Search Console reports the property as **verified**. The guard only
+checks that the value is non-empty, so an unverified id turns a skipped step into one that fails
+every Monday.
+
+Bing Webmaster Tools is a separate, optional connection. The other apps have one; this site does
+not, and nothing is wired for it.
