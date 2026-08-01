@@ -27,11 +27,11 @@ const gaId = import.meta.env.PROD ? (import.meta.env.PUBLIC_GA_ID || GA_MEASUREM
 
 const navLinks = [
   { href: '/',                 label: 'home',     match: (p: string) => p === '/' },
-  { href: '/projects',         label: 'projects', match: (p: string) => p.startsWith('/projects') },
-  { href: '/writing',          label: 'writing',  match: (p: string) => p.startsWith('/writing') },
-  { href: '/impossible-list',  label: 'impossible list', match: (p: string) => p.startsWith('/impossible-list') },
-  { href: '/about',            label: 'about',    match: (p: string) => p === '/about' },
-  { href: '/uses',             label: 'uses',     match: (p: string) => p === '/uses' },
+  { href: '/projects/',        label: 'projects', match: (p: string) => p.startsWith('/projects') },
+  { href: '/writing/',         label: 'writing',  match: (p: string) => p.startsWith('/writing') },
+  { href: '/impossible-list/', label: 'impossible list', match: (p: string) => p.startsWith('/impossible-list') },
+  { href: '/about/',           label: 'about',    match: (p: string) => p === '/about' },
+  { href: '/uses/',           label: 'uses',     match: (p: string) => p === '/uses' },
 ];
 ---
 <!doctype html>

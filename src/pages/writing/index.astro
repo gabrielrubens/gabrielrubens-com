@@ -29,7 +29,7 @@ const formatDate = (d: Date) =>
     <ul class="post-index">
       {posts.map((post) => (
         <li>
-          <a href={`/writing/${post.id}`}>
+          <a href={`/writing/${post.id}/`}>
             <div class="post-row">
               <div class="post-date">{formatDate(post.data.pubDate)}</div>
               <div class="post-body">

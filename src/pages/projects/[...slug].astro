@@ -36,7 +36,7 @@ const related = projects
 ---
 <Base title={`${title} · Gabriel Rubens`} description={tagline}>
   <div style={rootStyle}>
-    <a href="/projects" class="back">← projects</a>
+    <a href="/projects/" class="back">← projects</a>
 
     <header class="detail-head">
       <div style="display:flex;gap:1rem;align-items:center">
@@ -103,7 +103,7 @@ const related = projects
       <h4>// other projects</h4>
       <div class="related-grid">
         {related.map((r) => (
-          <a href={`/projects/${r.id}`}>
+          <a href={`/projects/${r.id}/`}>
             <div class="n">{r.data.title}</div>
             <div class="t">{r.data.tagline.split(' ').slice(0, 6).join(' ').toLowerCase()}…</div>
           </a>

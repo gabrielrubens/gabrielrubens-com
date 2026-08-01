@@ -20,7 +20,7 @@ const styleVars = [
   `--card-accent:${palette.accent}`,
 ].join(';');
 ---
-<a class="project-card" href={`/projects/${project.id}`} style={styleVars}>
+<a class="project-card" href={`/projects/${project.id}/`} style={styleVars}>
   <div
     class:list={['shot', { 'has-image': !!screenshot, [`is-${screenshotOrientation}`]: !!screenshotOrientation }]}
     data-shot-label={shotLabel}

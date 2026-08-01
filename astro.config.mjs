@@ -5,7 +5,7 @@ import cloudflare from "@astrojs/cloudflare";
 
 export default defineConfig({
   site: 'https://gabrielrubens.com',
-  trailingSlash: 'never',
+  trailingSlash: 'always',
 
   build: {
     format: 'directory',

@@ -35,7 +35,7 @@ const latestPost = latest
 
     <div class="hero-products">
       {projects.map((p) => (
-        <a href={`/projects/${p.id}`}>
+        <a href={`/projects/${p.id}/`}>
           <div class="pmark" style={`background:${p.data.palette.bg}`}>
             {p.data.icon && <img src={p.data.icon} alt="" />}
           </div>
@@ -64,7 +64,7 @@ const latestPost = latest
         <div class="eyebrow">// featured work</div>
         <h2>Five products, <em>four live</em>.</h2>
       </div>
-      <a href="/projects" class="more">see all →</a>
+      <a href="/projects/" class="more">see all →</a>
     </div>
     <div class="projects">
       {projects.map((p) => <ProjectCard project={p} />)}
