@@ -14,10 +14,16 @@ const {
 const canonical = new URL(Astro.url.pathname, Astro.site).toString();
 const pathname = Astro.url.pathname.replace(/\/$/, '') || '/';
 
-// GA4. Production builds only, and only when PUBLIC_GA_ID is set, so localhost and preview
-// builds never pollute the numbers. That contamination is not hypothetical: the portfolio's
-// own Lighthouse CI silently poisoned GotHired's PostHog pageview funnels for weeks.
-const gaId = import.meta.env.PROD ? import.meta.env.PUBLIC_GA_ID : undefined;
+// GA4, production builds only, so localhost and preview builds never pollute the numbers. That
+// contamination is not hypothetical: the portfolio's own Lighthouse CI silently poisoned
+// GotHired's PostHog pageview funnels for weeks.
+//
+// The measurement id is hardcoded on purpose. It is a public identifier that ships in the HTML of
+// every page anyway, so treating it as config bought nothing and added a step that could be
+// forgotten, which would mean weeks of silently collecting nothing. PUBLIC_GA_ID still overrides
+// it if a fork or a staging property ever needs a different one.
+const GA_MEASUREMENT_ID = 'G-CYG1592WG0';   // "gabrielrubens.com - GA4", property 326004239
+const gaId = import.meta.env.PROD ? (import.meta.env.PUBLIC_GA_ID || GA_MEASUREMENT_ID) : undefined;
 
 const navLinks = [
   { href: '/',                 label: 'home',     match: (p: string) => p === '/' },
@@ -59,20 +65,32 @@ const navLinks = [
 
     {gaId && (
       <>
-        <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`} />
         <script is:inline define:vars={{ gaId }}>
-          window.dataLayer = window.dataLayer || [];
-          function gtag() { dataLayer.push(arguments); }
-          // Consent Mode v2. Analytics only: every advertising signal stays denied, so nothing
-          // here feeds ad profiles. See docs/analytics.md for what this does and does not cover.
-          gtag('consent', 'default', {
-            ad_storage: 'denied',
-            ad_user_data: 'denied',
-            ad_personalization: 'denied',
-            analytics_storage: 'granted',
-          });
-          gtag('js', new Date());
-          gtag('config', gaId, { anonymize_ip: true });
+          // Runtime host gate, and the loader lives INSIDE it on purpose. A build-time PROD check
+          // is not enough by itself: a Cloudflare preview deployment is also a production build,
+          // so it would report real hits from a *.workers.dev URL. Gating only the config call
+          // would still download gtag.js on every preview. Only the live domain loads anything.
+          if (location.hostname === 'gabrielrubens.com') {
+            window.dataLayer = window.dataLayer || [];
+            function gtag() { dataLayer.push(arguments); }
+
+            // Consent Mode v2, set BEFORE the library loads so the defaults are never missed.
+            // Analytics only: every advertising signal stays denied, so nothing here feeds ad
+            // profiles. See docs/analytics.md for what this does and does not cover.
+            gtag('consent', 'default', {
+              ad_storage: 'denied',
+              ad_user_data: 'denied',
+              ad_personalization: 'denied',
+              analytics_storage: 'granted',
+            });
+            gtag('js', new Date());
+            gtag('config', gaId, { anonymize_ip: true });
+
+            var s = document.createElement('script');
+            s.async = true;
+            s.src = 'https://www.googletagmanager.com/gtag/js?id=' + gaId;
+            document.head.appendChild(s);
+          }
         </script>
       </>
     )}

@@ -16,22 +16,49 @@ files that ran for three months with zero readers.
 
 ## How it is wired
 
-| Where | What |
-|---|---|
-| `src/layouts/Base.astro` | The gtag snippet, rendered **only** when `PUBLIC_GA_ID` is set **and** the build is production |
-| `PUBLIC_GA_ID` | The **measurement** id, `G-XXXXXXXXXX`. Set it in the Cloudflare Pages/Workers build environment |
-| `~/dev/analytics/apps/gabrielrubens.yml` | The **property** id (digits). Different thing, see below |
+| Where | What | Value |
+|---|---|---|
+| `src/layouts/Base.astro` | the gtag snippet | measurement id `G-CYG1592WG0` |
+| `~/dev/analytics/apps/gabrielrubens.yml` | what the Data API reads | property id `326004239` |
 
-**Two different ids, and mixing them up is the usual mistake.**
-`PUBLIC_GA_ID` is the measurement id (`G-` prefix) that the browser sends hits to.
-`ga4_property_id` is the numeric property id the Data API reads from. You need both, in different
-places.
+**Two different ids, and mixing them up is the usual mistake.** The measurement id (`G-` prefix) is
+where the browser sends hits. The numeric property id is what the Data API reads from. Both are
+needed, in different places.
 
-### Localhost never counts
+The measurement id is **hardcoded**, not an env var. It is a public identifier that ships in the
+HTML of every page anyway, so treating it as config bought nothing and added a step that could be
+forgotten, which would mean weeks of silently collecting nothing. `PUBLIC_GA_ID` still overrides it
+if a fork or a staging property ever needs a different one.
 
-`gaId` resolves to `undefined` outside a production build, so `npm run dev` and preview builds emit
-no tag at all. This is not paranoia: the portfolio's own Lighthouse CI quietly poisoned GotHired's
-PostHog pageview funnels for weeks, and server-side events were the only clean source afterwards.
+### Which property, and what NOT to delete
+
+The account holds two, both from the old WordPress site:
+
+| Property | Id | Data stream | Covers | Verdict |
+|---|---|---|---|---|
+| `gabrielrubens.com - GA4` | **326004239** | yes, `G-CYG1592WG0` | Sep 2022 to mid 2024 | **use this** |
+| `gabrielrubens.com` | 288097250 | **none** | 2021 to May 2023 | **keep, do not delete** |
+
+The old one has no data stream, so it can never collect again. But it is the **only copy of the
+first year**: probed 2026-08-01, it has 12 sessions in 2021-09 and 8 in 2022-03 where 326004239 has
+zero. They overlap Sep 2022 to May 2023 because both were tagged during the migration, and after
+May 2023 the old one is flat zero. An empty property costs nothing to keep; deleting it destroys
+that first year permanently.
+
+### Nothing counts except the live domain
+
+Two gates, and the second one is the one that matters:
+
+1. **Build time** — `import.meta.env.PROD`, so `npm run dev` emits nothing.
+2. **Runtime** — `location.hostname === 'gabrielrubens.com'`, and **the loader is injected inside
+   that check**, so a preview URL does not even download `gtag.js`.
+
+The runtime gate exists because the build-time one is not sufficient on its own: **a Cloudflare
+preview deployment is also a production build**, so `PROD` is true there and it would have reported
+real hits from a `*.workers.dev` URL.
+
+This is not paranoia. The portfolio's own Lighthouse CI quietly poisoned GotHired's PostHog
+pageview funnels for weeks, and server-side events were the only clean source afterwards.
 Self-inflicted traffic is the easiest way to make a number lie.
 
 ## Consent
@@ -50,17 +77,18 @@ So nothing here feeds ad profiles, and `anonymize_ip` is on.
 > no accounts and no user data, not an oversight. If it ever matters, the options are a real
 > consent banner, or switching `analytics_storage` to denied by default and accepting sampled data.
 
-## Setup, once
+## Setup
 
-1. Create a GA4 property for `gabrielrubens.com` (Admin -> Create property -> Web data stream).
-2. Copy the **measurement id** (`G-XXXXXXXXXX`) into `PUBLIC_GA_ID` in the Cloudflare build env.
-3. Copy the **property id** (digits, Admin -> Property Settings) into `ga4_property_id` in
-   `~/dev/analytics/apps/gabrielrubens.yml`.
-4. Grant the analytics service account Viewer on the property, so the Action can read it. The
-   account is the one already used for the other properties; see `analytics/tools/ga4.py`.
+Done, 2026-08-01. Both ids are committed and the collector is wired.
 
-Step 3 is guarded: `run_all.py` skips the site entirely while `ga4_property_id` is blank, so an
-unfilled id never breaks a Monday collection. It starts reporting by itself once the id lands.
+**No service-account grant was needed.** The `Collect` Action authenticates with `GA4_TOKEN_JSON`,
+the same OAuth user token as the local `~/.config/gcloud/ga4-token.json`, and that token already
+reads property 326004239 (verified by querying it directly). This was worth checking rather than
+assuming: had the Action used a service account, it would have needed Viewer on the property first.
+
+`run_all.py` guards the site step with `_has_ga4()`, which reads the yml and skips it while
+`ga4_property_id` is blank. Now that the id is filled the weekly collection is **28 steps** instead
+of 27, and the site appears in the Monday digest.
 
 ## What is still not measured
 
