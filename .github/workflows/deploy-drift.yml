@@ -1,0 +1,130 @@
+# =============================================================================
+# Deploy drift — is what is RUNNING the same as what should be running?
+# =============================================================================
+# Same question as the check in pensio / gravity / gothired / hobbycat / farlist,
+# asked a different way, because this repo is the one property with NO CI at all.
+#
+# There, the deploy is a GitHub Actions job, so the check reads the last
+# successful deploy run and compares its headSha to the branch. Here `npm run
+# deploy` is a manual `wrangler deploy` from a laptop. There is no run to read,
+# no log, and nothing that records what went out. Main and the live site can sit
+# out of sync indefinitely with nothing anywhere saying so, which is the shape
+# this family of checks exists to catch.
+#
+# So the site is made to carry its own version (scripts/stamp-version.mjs writes
+# public/version.json as npm's `prebuild`), and this job ASKS THE LIVE SITE. That
+# is deliberate: the gate has to probe the same surface a real visitor gets, over
+# the real DNS and the real CDN. A check that read the repo, or the local dist/,
+# would pass happily while the deployed Worker served something else entirely.
+#
+# WHY A GRACE WINDOW, when the sibling checks barely need one: on the other apps
+# a merge to main deploys itself within minutes, so drift is always a fault. Here
+# drift is NORMAL for a while by design, because publishing is a separate manual
+# act. Alerting the moment a commit lands would fire on every single commit and
+# train the reader to ignore it, which is the same wolf-crying failure that made
+# "no deploy in N days" the wrong check on the other five. So the invariant is
+# narrower: a commit that has been on main for longer than GRACE_HOURS and is
+# still not the thing being served.
+#
+# NO NEW CREDENTIAL. Runs on the built-in GITHUB_TOKEN and an unauthenticated
+# HTTPS GET of a public URL. A failing scheduled workflow already emails the
+# repo owner, so there is nothing extra to rotate. (That matters here more than
+# anywhere: the outage this family of checks was written for was caused by a
+# silently expired token.)
+#
+# ⚠️ SCHEDULED WORKFLOWS ONLY RUN ON THE DEFAULT BRANCH. This file must stay on
+# `main` or it silently never runs, which would be the same class of bug it is
+# meant to catch.
+# =============================================================================
+
+name: Deploy drift
+
+on:
+  schedule:
+    - cron: "0 9 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  drift:
+    name: The live site is serving the head of main
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Compare the deployed sha against the head of main
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          RUN_ID: ${{ github.run_id }}
+          BRANCH: main
+          VERSION_URL: https://gabrielrubens.com/version.json
+          # How long a commit may sit on main un-deployed before that counts as
+          # drift rather than "not published yet". Publishing here is manual and
+          # occasional, so this is generous on purpose.
+          GRACE_HOURS: "24"
+        run: |
+          set -uo pipefail
+
+          expected=$(gh api "repos/$REPO/commits/$BRANCH" -q .sha 2>/dev/null)
+          if [ -z "${expected:-}" ]; then
+            echo "FAIL  cannot read the head of $BRANCH. A checker that does not"
+            echo "      know what SHOULD be deployed goes red, never quietly green."
+            exit 1
+          fi
+          committed_at=$(gh api "repos/$REPO/commits/$BRANCH" -q .commit.committer.date)
+
+          # Cache bust and ask for a fresh copy: a CDN-cached version.json would
+          # report the previous deploy and hide the very drift being looked for.
+          live=$(curl -fsSL --max-time 20 -H 'Cache-Control: no-cache' \
+                   "${VERSION_URL}?cachebust=${RUN_ID}" 2>/dev/null)
+          if [ -z "${live:-}" ]; then
+            echo "FAIL  $VERSION_URL did not answer."
+            echo "      Either the site is down, or what is deployed predates the"
+            echo "      version stamp, which means the last deploy is unknown and"
+            echo "      the honest answer is not 'fine'. Run: npm run deploy"
+            exit 1
+          fi
+
+          deployed=$(echo "$live" | jq -r '.sha // empty')
+          built_at=$(echo "$live" | jq -r '.builtAt // "unknown"')
+          dirty=$(echo "$live"  | jq -r '.dirty // false')
+
+          if [ -z "$deployed" ]; then
+            echo "FAIL  version.json carries no sha. Served: $live"
+            exit 1
+          fi
+
+          echo "expected (head of $BRANCH): $expected  ($committed_at)"
+          echo "deployed (live site):       $deployed  (built $built_at)"
+
+          if [ "$dirty" = "true" ]; then
+            echo "WARN  the live build was made from a DIRTY working tree, so the"
+            echo "      sha above does not fully describe what is running."
+          fi
+
+          if [ "$deployed" = "$expected" ]; then
+            echo "OK    the live site is serving the head of $BRANCH."
+            exit 0
+          fi
+
+          # python3, not `date -u -d`: the latter is GNU-only, so the grace path
+          # could not be exercised on a Mac before shipping. Same reasoning, and
+          # the same helper, as the sibling checks.
+          if python3 - "$committed_at" "$GRACE_HOURS" <<'PY'
+          import sys, datetime
+          when = datetime.datetime.fromisoformat(sys.argv[1].replace("Z", "+00:00"))
+          age_h = (datetime.datetime.now(datetime.timezone.utc) - when).total_seconds() / 3600
+          sys.exit(0 if age_h >= float(sys.argv[2]) else 1)
+          PY
+          then
+            echo "FAIL  the head of $BRANCH has been un-deployed for more than"
+            echo "      $GRACE_HOURS hours. The site is UP and serving older code,"
+            echo "      so nothing else will tell you. Run: npm run deploy"
+            exit 1
+          fi
+
+          echo "OK    not deployed yet, but the commit is younger than"
+          echo "      $GRACE_HOURS hours. Publishing here is manual, so this is"
+          echo "      normal rather than a fault."

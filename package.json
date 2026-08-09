@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
+    "prebuild": "node scripts/stamp-version.mjs",
     "build": "astro build",
     "preview": "npm run build && wrangler dev",
     "astro": "astro",

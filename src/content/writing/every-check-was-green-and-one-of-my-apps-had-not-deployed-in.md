@@ -1,6 +1,6 @@
 ---
-title: "Every check was green and one of my apps had not deployed in ten weeks"
-description: "I spent a week chasing a flaky deploy step. The instrumentation I added to diagnose it found something worse: another one of my apps had not deployed at all in ten weeks, and every check was green."
+title: "Every check was green and one of my apps had not deployed itself in ten weeks"
+description: "I spent a week chasing a flaky deploy step. The instrumentation I added to diagnose it found something worse: another one of my apps had not run an automated deploy in ten weeks, and every check was green."
 pubDate: 2026-08-07
 draft: false
 tags: [ci, deploy, indie, pensio, farlist]
@@ -77,16 +77,22 @@ With Pensio soaked for a couple of days I copied the diagnostic step out to my o
 Farlist, my slow journal for long arc goals, ran it once and printed a completely clean path to its
 server, so the network was never its problem.
 
-Its deploy had been failing on every single attempt since May 25. Ten weeks. The cause was an
-expired GHCR token, which is a thirty second fix. Everything merged in that window was built,
-tested, and never shipped, including the Active Storage patch I had merged the day before.
+Its automated deploy had been failing on every single attempt since May 25. Ten weeks. The cause
+was an expired registry token, which is a thirty second fix. Every push in that window was built,
+tested, and then stopped at the last step, with nothing anywhere saying so.
+
+What saved me there is luck rather than process. Farlist is the one project I also deploy by hand
+with Kamal, so the site was never frozen on ten week old code. That makes it a smaller incident and
+a worse one: the pipeline I trusted to ship had shipped nothing at all for ten weeks, and the only
+reason it did not cost me anything is a habit I happen to have on that one app and not on the
+others.
 
 The reason nobody noticed is the part I want to remember, because none of it was carelessness. The
 branch looked healthy, since Dependabot's green runs are what you see first in the run list. The
 failure lived in a job inside a different workflow, so you have to already suspect it to filter for
-it. And the site returned HTTP 200 the entire time, because it was serving old code, not down.
-Uptime monitoring is blind to this by construction. Pinging a URL can never tell you which version
-answered.
+it. And the site returned HTTP 200 the entire time, so nothing external had anything to complain
+about. Uptime monitoring is blind to this by construction: pinging a URL tells you that something
+answered, never which version answered.
 
 ## Check the sha, not the pipeline
 
